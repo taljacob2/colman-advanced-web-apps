@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: Post and Comment API
+  description: API for managing posts and comments.
+  version: 1.0.0
+
+tags:
+  - name: Posts
+    description: Operations related to posts
+  - name: Comments
+    description: Operations related to comments on posts
+
+paths:
+  # Post Routes
+  /post:
+    get:
+      tags:
+        - Posts
+      summary: Retrieve all posts
+      operationId: getPosts
+      responses:
+        '200':
+          description: A list of all posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - Posts
+      summary: Create a new post
+      operationId: createPost
+      requestBody:
+        description: The post data to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad request - Missing required fields
+
+  /post/{postId}:
+    put:
+      tags:
+        - Posts
+      summary: Update an existing post
+      operationId: updatePost
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to update
+          schema:
+            type: string
+      requestBody:
+        description: Updated post data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad request - Missing required fields or invalid postId
+        '404':
+          description: Not found - The postId does not exist
+
+  /post/{postId}/comment:
+    get:
+      tags:
+        - Posts
+      summary: Retrieve comments for a specific post
+      operationId: getCommentsByPostId
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to fetch comments for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of comments for the specified post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Invalid postId
+        '404':
+          description: Not found - The postId does not exist
+
+  # Comment Routes
+  /comment:
+    get:
+      tags:
+        - Comments
+      summary: Retrieve all comments
+      operationId: getComments
+      responses:
+        '200':
+          description: A list of all comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - Comments
+      summary: Create a new comment
+      operationId: createComment
+      requestBody:
+        description: The comment data to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Comment successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Missing required fields or invalid postId
+        '404':
+          description: Not found - The postId does not exist
+
+  /comment/{commentId}:
+    put:
+      tags:
+        - Comments
+      summary: Update an existing comment
+      operationId: updateComment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to update
+          schema:
+            type: string
+      requestBody:
+        description: Updated comment data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Comment successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Missing required fields or invalid commentId
+        '404':
+          description: Not found - The commentId does not exist
+
+    delete:
+      tags:
+        - Comments
+      summary: Delete an existing comment
+      operationId: deleteComment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment successfully deleted
+        '400':
+          description: Bad request - Invalid commentId
+        '404':
+          description: Not found - The commentId does not exist
+
+  /comment/post/{postId}:
+    get:
+      tags:
+        - Comments
+      summary: Retrieve comments of a specific post
+      operationId: getCommentsByPostId
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to fetch comments for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of comments for the specified post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Invalid postId
+        '404':
+          description: Not found - The postId does not exist
+
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+        - _id
+        - sender
+        - title
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        _id:
+          type: string
+          description: The unique identifier of the post
+        sender:
+          type: string
+          description: The sender of the post
+        title:
+          type: string
+          description: The title of the post
+        content:
+          type: string
+          description: The content of the post
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the post was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the post was last updated
+
+    PostRequest:
+      type: object
+      required:
+        - sender
+        - title
+        - content
+      properties:
+        sender:
+          type: string
+          description: The sender of the post
+        title:
+          type: string
+          description: The title of the post
+        content:
+          type: string
+          description: The content of the post
+
+    Comment:
+      type: object
+      required:
+        - _id
+        - postId
+        - sender
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        _id:
+          type: string
+          description: The unique identifier of the comment
+        postId:
+          type: string
+          description: The ID of the post the comment belongs to
+        sender:
+          type: string
+          description: The sender of the comment
+        content:
+          type: string
+          description: The content of the comment
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the comment was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the comment was last updated
+
+    CommentRequest:
+      type: object
+      required:
+        - postId
+        - sender
+        - content
+      properties:
+        postId:
+          type: string
+          description: The ID of the post the comment should belong to
+        sender:
+          type: string
+          description: The sender of the comment
+        content:
+          type: string
+          description: The content of the comment
