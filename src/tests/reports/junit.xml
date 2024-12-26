@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="28" failures="0" errors="0" time="2.689">
+  <testsuite name="given db empty of comments when http request GET /comment" errors="0" failures="0" skipped="0" timestamp="2024-12-26T10:00:43" time="1.808" tests="18">
+    <testcase classname="given db empty of comments when http request GET /comment then should return empty list" name="given db empty of comments when http request GET /comment then should return empty list" time="0.105">
+    </testcase>
+    <testcase classname="when http request POST /post then should add post to the db" name="when http request POST /post then should add post to the db" time="0.073">
+    </testcase>
+    <testcase classname="when http request POST /comment to an unknown post then should return 400 bad request http status" name="when http request POST /comment to an unknown post then should return 400 bad request http status" time="0.013">
+    </testcase>
+    <testcase classname="when http request POST /comment to an existing post without required sender field then should return 400 bad request http status" name="when http request POST /comment to an existing post without required sender field then should return 400 bad request http status" time="0.023">
+    </testcase>
+    <testcase classname="when http request POST /comment without required postId field then should return 404 not found http status" name="when http request POST /comment without required postId field then should return 404 not found http status" time="0.016">
+    </testcase>
+    <testcase classname="when http request POST /comment  to an existing post then should add comment to the db" name="when http request POST /comment  to an existing post then should add comment to the db" time="0.025">
+    </testcase>
+    <testcase classname="when http request POST /comment  to an existing post then should add comment to the db" name="when http request POST /comment  to an existing post then should add comment to the db" time="0.056">
+    </testcase>
+    <testcase classname="given db initialized with comments when http request GET /comment then should return all coments in the db" name="given db initialized with comments when http request GET /comment then should return all coments in the db" time="0.013">
+    </testcase>
+    <testcase classname="when http request PUT /comment/id of unknown post then should return 201 created http status" name="when http request PUT /comment/id of unknown post then should return 201 created http status" time="0.022">
+    </testcase>
+    <testcase classname="when http request PUT /comment/id of unknown comment then should return 400 bad request http status" name="when http request PUT /comment/id of unknown comment then should return 400 bad request http status" time="0.01">
+    </testcase>
+    <testcase classname="when http request PUT /comment/id without required postId field then should return 201 created http status" name="when http request PUT /comment/id without required postId field then should return 201 created http status" time="0.017">
+    </testcase>
+    <testcase classname="when http request PUT /comment/id without required sender field then should return 400 bad request http status" name="when http request PUT /comment/id without required sender field then should return 400 bad request http status" time="0.015">
+    </testcase>
+    <testcase classname="when http request PUT /comment/id of existing post and comment then should update comment in the db" name="when http request PUT /comment/id of existing post and comment then should update comment in the db" time="0.016">
+    </testcase>
+    <testcase classname="given existing post when http request GET /comment/post/id then should return its comments only" name="given existing post when http request GET /comment/post/id then should return its comments only" time="0.015">
+    </testcase>
+    <testcase classname="given unknown post when http request GET /comment/post/id then should return 400 bad request http status" name="given unknown post when http request GET /comment/post/id then should return 400 bad request http status" time="0.007">
+    </testcase>
+    <testcase classname="given existing post without any comments when http request GET /comment/post/id then should return empty list" name="given existing post without any comments when http request GET /comment/post/id then should return empty list" time="0.015">
+    </testcase>
+    <testcase classname="given unknown comment when http request DELETE /comment/id then should return 400 bad request http status" name="given unknown comment when http request DELETE /comment/id then should return 400 bad request http status" time="0.01">
+    </testcase>
+    <testcase classname="given existing comment when http request DELETE /comment/id then should return 200 success http status" name="given existing comment when http request DELETE /comment/id then should return 200 success http status" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="given db empty of posts when http request GET /post" errors="0" failures="0" skipped="0" timestamp="2024-12-26T10:00:45" time="0.774" tests="10">
+    <testcase classname="given db empty of posts when http request GET /post then should return empty list" name="given db empty of posts when http request GET /post then should return empty list" time="0.067">
+    </testcase>
+    <testcase classname="when http request POST /post then should add post to the db" name="when http request POST /post then should add post to the db" time="0.042">
+    </testcase>
+    <testcase classname="when http request POST /post then should add posts to the db" name="when http request POST /post then should add posts to the db" time="0.044">
+    </testcase>
+    <testcase classname="when http request POST /post without required sender field then should return 400 bad request http status" name="when http request POST /post without required sender field then should return 400 bad request http status" time="0.013">
+    </testcase>
+    <testcase classname="given db initialized with posts when http request GET /post then should return all posts in the db" name="given db initialized with posts when http request GET /post then should return all posts in the db" time="0.016">
+    </testcase>
+    <testcase classname="given unknown username when http request GET /post?sender then should return empty list" name="given unknown username when http request GET /post?sender then should return empty list" time="0.017">
+    </testcase>
+    <testcase classname="given existing username when http request GET /post?sender then should return his posts only" name="given existing username when http request GET /post?sender then should return his posts only" time="0.013">
+    </testcase>
+    <testcase classname="when http request PUT /post/id of unknown post then should return 400 bad request http status" name="when http request PUT /post/id of unknown post then should return 400 bad request http status" time="0.016">
+    </testcase>
+    <testcase classname="when http request PUT /post/id of existing post then should update post in the db" name="when http request PUT /post/id of existing post then should update post in the db" time="0.016">
+    </testcase>
+    <testcase classname="when http request PUT /post/id of existing post but without required sender field then should return 400 bad request http status" name="when http request PUT /post/id of existing post but without required sender field then should return 400 bad request http status" time="0.012">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,7 +1,9 @@
-// eslint-disable-next-line import/no-commonjs
-module.exports = {
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+export default {
+    preset: "ts-jest",
+    testEnvironment: "node",
     testTimeout: 10 * 1000,
-    roots: ['../'],
+    roots: ["../"],
     passWithNoTests: true,
     setupFilesAfterEnv: ['./setup-tests.js'],
     testMatch: ['**/*.test.js'],

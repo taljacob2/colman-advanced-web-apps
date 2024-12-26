@@ -1,7 +1,8 @@
-const dotenv = require("dotenv");
-const dotenvExpand = require("dotenv-expand");
+import dotenv from "dotenv";
+import dotenvExpand from "dotenv-expand";
+import mongoose from 'mongoose';
 dotenvExpand.expand(dotenv.config());
-const mongoose = require('mongoose');
+
 
 
 /*
