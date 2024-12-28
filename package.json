@@ -2,7 +2,7 @@
   "name": "ex",
   "version": "1.0.0",
   "description": "Advanced Web Apps Course Exercise",
-  "main": "server.js",
+  "main": "src/server.ts",
   "scripts": {
     "start": "tsc && node dist/server.js",
     "dev": "nodemon ./src/server.ts",
