@@ -4,7 +4,7 @@
   "description": "Advanced Web Apps Course Exercise",
   "main": "server.js",
   "scripts": {
-    "start": "tsc && node dist/src/server.js",
+    "start": "tsc && node dist/server.js",
     "dev": "nodemon ./src/server.ts",
     "test": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit"
   },
