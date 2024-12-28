@@ -11,4 +11,4 @@ package-lock.json
 .env
 
 # Tests
-tests/reports/
+**/tests/reports
