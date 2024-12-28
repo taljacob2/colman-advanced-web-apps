@@ -5,8 +5,8 @@ export default {
     testTimeout: 10 * 1000,
     roots: ["../"],
     passWithNoTests: true,
-    setupFilesAfterEnv: ['./setup-tests.js'],
-    testMatch: ['**/*.test.js'],
+    setupFilesAfterEnv: ['./setup-tests.ts'],
+    testMatch: ['**/*.test.ts'],
     collectCoverageFrom: ['../**/*.js', '!../../node_modules/**'],
     reporters: [
         'default',
