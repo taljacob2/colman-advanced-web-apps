@@ -1,5 +1,5 @@
-const postModel = require('../models/posts_model');
-const commentModel = require('../models/comments_model');
+import postModel from '../models/posts_model';
+import commentModel from '../models/comments_model';
 
 const createComment = async (req, res) => {
     const comment = req.body;
@@ -80,4 +80,4 @@ const getAllComments = async (req, res) => {
     }
 }
 
-module.exports = {createComment, getByPostId, updateCommentById, deleteCommentById, getAllComments};
+export default {createComment, getByPostId, updateCommentById, deleteCommentById, getAllComments};

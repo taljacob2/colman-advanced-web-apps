@@ -1,5 +1,5 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+import app from './app';
+import mongoose from 'mongoose';
 
 
 // Start app while verifying connection to the database.

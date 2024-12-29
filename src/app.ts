@@ -1,11 +1,14 @@
-const express = require('express');
-const dotenv = require("dotenv");
-const dotenvExpand = require("dotenv-expand");
+import express from 'express';
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
+import bodyParser from 'body-parser';
+import posts_routes from './routes/posts_routes';
+import comments_routes from './routes/comments_routes';
+
+
 dotenvExpand.expand(dotenv.config());
 const app = express();
 
-
-const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -17,9 +20,8 @@ app.use((err, req, res, next) => {
     next(err);
 });
 
-const posts_routes = require('./routes/posts_routes');
+
 app.use('/post', posts_routes);	
-const comments_routes = require('./routes/comments_routes');
 app.use('/comment', comments_routes);	
 
-module.exports = app;
+export default app;

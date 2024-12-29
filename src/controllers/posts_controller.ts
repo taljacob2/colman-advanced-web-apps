@@ -1,4 +1,4 @@
-const postModel = require('../models/posts_model');
+import postModel from '../models/posts_model';
 
 const getAllPosts =  async (req, res) => {
     const senderFilter = req.query.sender;
@@ -61,4 +61,4 @@ const updatePostById = async (req, res) => {
     }
 }
 
-module.exports = {getAllPosts, createPost, getPostById, updatePostById};
+export default {getAllPosts, createPost, getPostById, updatePostById};

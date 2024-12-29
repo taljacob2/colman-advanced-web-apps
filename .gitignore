@@ -4,10 +4,11 @@
 
 # Node
 node_modules/
+dist/
 package-lock.json
 
 # Environment
 .env
 
 # Tests
-tests/reports/
+**/tests/reports
