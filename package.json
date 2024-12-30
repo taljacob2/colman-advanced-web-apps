@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "dev": "nodemon ./src/server.ts",
-    "test": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit"
+    "test": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit",
+    "testAuth": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit auth_controller.test.ts"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/taljacob2/colman-advanced-web-apps#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
@@ -26,13 +28,16 @@
     "express": "^4.21.1",
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.2",
     "supertest": "^7.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.1",
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/supertest": "^6.0.2",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
