@@ -155,8 +155,8 @@ describe('when http request PUT /comment/id of unknown post', () => {
         const resBody = res.body;
 
         expect(res.statusCode).toBe(201);
-        expect(new Date(resBody.updatedAt).getMilliseconds())
-            .toBeGreaterThan(new Date(resBody.createdAt).getMilliseconds());
+        expect(new Date(resBody.updatedAt).getTime())
+            .toBeGreaterThan(new Date(resBody.createdAt).getTime());
         delete resBody._id;
         delete resBody.createdAt;
         delete resBody.updatedAt;
@@ -189,8 +189,8 @@ describe('when http request PUT /comment/id without required postId field', () =
         const resBody = res.body;
 
         expect(res.statusCode).toBe(201);
-        expect(new Date(resBody.updatedAt).getMilliseconds())
-            .toBeGreaterThan(new Date(resBody.createdAt).getMilliseconds());
+        expect(new Date(resBody.updatedAt).getTime())
+            .toBeGreaterThan(new Date(resBody.createdAt).getTime());
         delete resBody._id;
         delete resBody.createdAt;
         delete resBody.updatedAt;
@@ -223,8 +223,8 @@ describe('when http request PUT /comment/id of existing post and comment', () =>
         const resBody = res.body;
 
         expect(res.statusCode).toBe(201);
-        expect(new Date(resBody.updatedAt).getMilliseconds())
-            .toBeGreaterThan(new Date(resBody.createdAt).getMilliseconds());
+        expect(new Date(resBody.updatedAt).getTime())
+            .toBeGreaterThan(new Date(resBody.createdAt).getTime());
         delete resBody._id;
         delete resBody.createdAt;
         delete resBody.updatedAt;    
