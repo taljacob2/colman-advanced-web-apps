@@ -7,7 +7,7 @@ const register = async (req:Request, res:Response) => {
     const email = req.body.email;
     const password = req.body.password;
     if(!email || !password){
-        return res.status(400).send("missing email or password");
+        return res.status(400).send("Missing email or password");
     }
     try{
         const salt = await bcrypt.genSalt(10);
@@ -26,7 +26,7 @@ const login = async (req:Request, res:Response) => {
     const email = req.body.email;
     const password = req.body.password;
     if(!email || !password){
-        return res.status(400).send("Wrong email or password");
+        return res.status(400).send("Missing email or password");
     }
     try{
         const user = await userModel.findOne({email: email});
@@ -40,7 +40,7 @@ const login = async (req:Request, res:Response) => {
         }
 
         if(!process.env.ACCESS_TOKEN_SECRET){
-            return res.status(400).send("missing auth config");
+            return res.status(500).send("missing auth config");
         }
         const token = jwt.sign(
             {_id: user._id},
@@ -74,7 +74,7 @@ export const authMiddleware = (req:Request,res:Response, next: NextFunction) => 
     }
     if(!process.env.ACCESS_TOKEN_SECRET){
         console.log("Missing auth config");
-        res.status(400).send("missing auth config");
+        res.status(500).send("missing auth config");
         return;
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
