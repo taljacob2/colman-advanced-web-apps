@@ -35,14 +35,14 @@ describe('Auth Test', () => {
     });
 
     test('Get proyected API', async () => {
-        const response = await request(app).post('/posts').send({
+        const response = await request(app).post('/post').send({
             sender: userInfo._id,
             title: "My First Post",
             content: "This is my First Posts"
         });
         expect(response.statusCode).not.toBe(201);
 
-        const response2 = await request(app).post('/posts').set({
+        const response2 = await request(app).post('/post').set({
             authorization: "jwt " + userInfo.token
         }).send({
             sender: userInfo._id,
