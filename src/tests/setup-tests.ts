@@ -27,8 +27,6 @@ dotenvExpand.expand(dotenv.config());
  * - Connect to the database.
  */
 global.beforeAll(() => {
-    
-    
     const DBNAME = process.env.DB_CONNECTION.split('/')[3].split('?')[0];
     const newDBNAME = new mongoose.Types.ObjectId().toString();
 
@@ -44,9 +42,6 @@ global.beforeAll(() => {
     const db = mongoose.connection;
     db.on('error', (error) => console.error(error));
     db.once('open', () => console.log("Connected to DataBase"));
-
-    
-    
 });
 
 /**

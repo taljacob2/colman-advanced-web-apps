@@ -7,14 +7,10 @@ const router = express.Router();
 
 router.get('/', Post.getAllPosts);
 
-router.post('/',authMiddleware, (req,res) => {
-    Post.createPost(req,res);
-});
+router.post('/', authMiddleware, Post.createPost);
 
 router.get('/:id', Post.getPostById);
 
-router.put('/:id',authMiddleware, (req,res) => {
-    Post.updatePostById(req,res);
-});
+router.put('/:id', authMiddleware, Post.updatePostById);
 
 export default router;
