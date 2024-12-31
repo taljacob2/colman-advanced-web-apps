@@ -13,6 +13,8 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+}, {
+    versionKey: false,
 });
 
 const UserModel = mongoose.model('Users', userSchema);
