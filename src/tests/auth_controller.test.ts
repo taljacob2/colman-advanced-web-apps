@@ -16,24 +16,8 @@ const userInfo2:UserInfo = {
     password: "555555"
 }
 
-type PostInfo = {
-    sender: string;
-    title: string;
-    content: string;
-    _id?: string;
-}
 
 
-const existingPost: PostInfo = {
-    sender: "MEVORAH",
-    title: "My First Post",
-    content: "This is my First Posts"
-}
-const commentBody = {
-    postId: existingPost._id,
-    sender: "USERNAME1",
-    content: "COMMENT1 CONTENT"
-};
 describe('Auth Post Test', () => {
     test('Auth Registragtion', async () => {
         const response = await request(app).post('/auth/register').send(userInfo);
