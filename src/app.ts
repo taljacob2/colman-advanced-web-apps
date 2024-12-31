@@ -4,6 +4,7 @@ import dotenvExpand from 'dotenv-expand';
 import bodyParser from 'body-parser';
 import posts_routes from './routes/posts_routes';
 import comments_routes from './routes/comments_routes';
+import auth_routes from './routes/auth_routes';
 
 
 dotenvExpand.expand(dotenv.config());
@@ -11,7 +12,6 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 // Error handler for invalid JSON
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError) {
@@ -19,9 +19,8 @@ app.use((err, req, res, next) => {
     }
     next(err);
 });
-
-
 app.use('/post', posts_routes);	
 app.use('/comment', comments_routes);	
+app.use('/auth', auth_routes);
 
 export default app;

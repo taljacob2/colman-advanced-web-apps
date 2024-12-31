@@ -6,6 +6,7 @@
 node_modules/
 dist/
 package-lock.json
+openssl-secret.txt
 
 # Environment
 .env
