@@ -2,6 +2,18 @@ import request from 'supertest';
 import app from '../app';
 
 let existingPost = null;
+let authToken = null;
+
+beforeAll(async () => {
+    // Register and login to get token
+    const user = {
+        email: "test@test.com",
+        password: "123456"
+    };
+    await request(app).post('/auth/register').send(user);
+    const loginResponse = await request(app).post('/auth/login').send(user);
+    authToken = loginResponse.body.token;
+});
 
 describe('given db empty of posts when http request GET /post', () => {
     it('then should return empty list', async () => {
@@ -18,7 +30,9 @@ describe('when http request POST /post', () => {
             "title": "POST1 TITLE",
             "content": "POST1 CONTENT"
         };
-        const res = await request(app).post('/post')
+        const res = await request(app)
+            .post('/post')
+            .set('Authorization', `jwt ${authToken}`)
             .send(body);
         const resBody = res.body;
         existingPost = { ...resBody };
@@ -41,7 +55,10 @@ describe('when http request POST /post', () => {
             "title": "POST1 TITLE",
             "content": "POST1 CONTENT"
         };
-        await request(app).post('/post').send(body1);
+        await request(app)
+            .post('/post')
+            .set('Authorization', `jwt ${authToken}`)
+            .send(body1);
 
         // Post 2
         const body2 = {
@@ -49,7 +66,10 @@ describe('when http request POST /post', () => {
             "title": "POST2 TITLE",
             "content": "POST2 CONTENT"
         };
-        await request(app).post('/post').send(body2);
+        await request(app)
+            .post('/post')
+            .set('Authorization', `jwt ${authToken}`)
+            .send(body2);
 
         // Post 3
         const body3 = {
@@ -57,7 +77,10 @@ describe('when http request POST /post', () => {
             "title": "POST3 TITLE",
             "content": "POST3 CONTENT"
         };
-        await request(app).post('/post').send(body3);
+        await request(app)
+            .post('/post')
+            .set('Authorization', `jwt ${authToken}`)
+            .send(body3);
     });
 });
 
@@ -67,7 +90,9 @@ describe('when http request POST /post without required sender field', () => {
             "title": "POST1 TITLE",
             "content": "POST1 CONTENT"
         };
-        const res = await request(app).post('/post')
+        const res = await request(app)
+            .post('/post')
+            .set('Authorization', `jwt ${authToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -114,7 +139,9 @@ describe('when http request PUT /post/id of unknown post', () => {
             "title": "UPDATED POST TITLE",
             "content": "UPDATED POST CONTENT"
         };
-        const res = await request(app).put(`/post/UNKNOWN`)
+        const res = await request(app)
+            .put(`/post/UNKNOWN`)
+            .set('Authorization', `jwt ${authToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -128,7 +155,9 @@ describe('when http request PUT /post/id of existing post', () => {
             "title": "UPDATED POST TITLE",
             "content": "UPDATED POST CONTENT"
         };
-        const res = await request(app).put(`/post/${existingPost._id}`)
+        const res = await request(app)
+            .put(`/post/${existingPost._id}`)
+            .set('Authorization', `jwt ${authToken}`)
             .send(body);
         const resBody = res.body;
         delete resBody._id;
@@ -144,7 +173,9 @@ describe('when http request PUT /post/id of existing post but without required s
             "title": "UPDATED POST TITLE",
             "content": "UPDATED POST CONTENT"
         };
-        const res = await request(app).put(`/post/${existingPost._id}`)
+        const res = await request(app)
+            .put(`/post/${existingPost._id}`)
+            .set('Authorization', `jwt ${authToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
