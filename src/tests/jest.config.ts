@@ -7,7 +7,7 @@ export default {
     passWithNoTests: true,
     setupFilesAfterEnv: ['./setup-tests.ts'],
     testMatch: ['**/*.test.ts'],
-    collectCoverageFrom: ['../**/*.js', '!../../node_modules/**'],
+    collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", '!../../node_modules/**'],
     reporters: [
         'default',
         ['jest-junit', {
