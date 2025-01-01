@@ -60,24 +60,24 @@ const login = async (req:Request, res:Response) => {
 type TokenPayload = {
     _id: string
 }
-export const authMiddleware = (req:Request,res:Response, next: NextFunction) => {
-    // Skip authentication for GET requests
-    if (req.method === 'GET') {
-        return next();
-    }
+export const authMiddleware = (req,res, next: NextFunction) => {
+    
 
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
     if(!token){
-        return res.status(401).send("missing token");
+        res.status(401).send("missing token");
+        return;
     }
     if(!process.env.ACCESS_TOKEN_SECRET){
-        return res.status(500).send("missing auth config");
+        res.status(500).send("missing auth config");
+        return;
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if(err){
-            return res.status(403).send("Invalid Token");
+            res.status(403).send("Invalid Token");
+            return;
         }
         
         const payload = data as TokenPayload;

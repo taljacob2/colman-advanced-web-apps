@@ -1,10 +1,11 @@
 import postModel from '../models/posts_model';
 import commentModel from '../models/comments_model';
+import mongoose from 'mongoose';
 
 const createComment = async (req, res) => {
     const comment = req.body;
-    try {
-        if (!comment.postId || !require('mongoose').Types.ObjectId.isValid(comment.postId)) {
+    try{
+        if (!comment.postId || !mongoose.Types.ObjectId.isValid(comment.postId)) {
             return res.status(400).send("Invalid post ID");
         }
 

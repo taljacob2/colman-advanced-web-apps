@@ -3,7 +3,7 @@ import app from '../app';
 
 describe('Authentication Status Code Tests', () => {
     let validToken: string;
-    let expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTVmZjJlNzk2ZjY4NDY5OWM5M2Y3ZjYiLCJpYXQiOjE3MDA3NjM4NzksImV4cCI6MTcwMDc2Mzg4MH0.1VroBCccWBUGqwEtQN5QQwo4IpXoP0xYLSQGbZtNeSE';
+    const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTVmZjJlNzk2ZjY4NDY5OWM5M2Y3ZjYiLCJpYXQiOjE3MDA3NjM4NzksImV4cCI6MTcwMDc2Mzg4MH0.1VroBCccWBUGqwEtQN5QQwo4IpXoP0xYLSQGbZtNeSE';
     let postId: string;
     let commentId: string;
 
