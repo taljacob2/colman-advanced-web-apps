@@ -2,6 +2,18 @@
 
 ## `.env`
 
+See [`.env.template`](.env.template) for all the environment variables required.
+
+### `PORT`
+
+The port number to serve the node server on when executing the `npm run dev` or `npm start` commands.
+
+For example `3000`.
+
+### `DB_CONNECTION`
+
+The connection string to the mongodb database.
+
 ### `ACCESS_TOKEN_SECRET`
 
 To generate a secret key for access and refresh token, execite this command in your terminal:
