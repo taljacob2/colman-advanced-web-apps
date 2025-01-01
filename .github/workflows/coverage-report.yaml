@@ -25,13 +25,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: npm i
+        uses: actions/setup-node@v1
       - run: npm run test
       - name: Run Tests & Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './reports/test-report'
+          path: './reports/coverage'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
