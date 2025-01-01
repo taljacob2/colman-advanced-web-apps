@@ -4,8 +4,12 @@ import commentModel from '../models/comments_model';
 const createComment = async (req, res) => {
     const comment = req.body;
     try {
+        if (!comment.postId || !require('mongoose').Types.ObjectId.isValid(comment.postId)) {
+            return res.status(400).send("Invalid post ID");
+        }
+
         const post = await postModel.findById(comment.postId);
-        if (post == null) {
+        if (!post) {
             return res.status(404).send('Post not found');
         }
         

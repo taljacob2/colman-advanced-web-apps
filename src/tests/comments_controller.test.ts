@@ -91,7 +91,7 @@ describe('when http request POST /comment to an existing post without required s
 });
 
 describe('when http request POST /comment without required postId field', () => {
-    it('then should return 404 not found http status', async () => {
+    it('then should return 400 bad request http status', async () => {
         const body = {
             "sender": "USERNAME1",
             "content": "COMMENT1 CONTENT"
@@ -101,7 +101,7 @@ describe('when http request POST /comment without required postId field', () => 
             .set('Authorization', `jwt ${authToken}`)
             .send(body);
 
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(400);
     });
 });
 
