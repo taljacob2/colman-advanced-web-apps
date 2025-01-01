@@ -30,11 +30,14 @@ jobs:
       - run: npm i
       - run: npm run test
       - name: Run Tests & Setup Pages
+        if: always()
         uses: actions/configure-pages@v2
       - name: Upload Artifact
+        if: always()
         uses: actions/upload-pages-artifact@v1
         with:
           path: './tests/reports/coverage'
       - name: Deploy to GitHub Pages
+        if: always()
         id: deployment
         uses: actions/deploy-pages@v1
