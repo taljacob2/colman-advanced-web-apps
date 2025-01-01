@@ -11,13 +11,8 @@ export default {
     reporters: [
         'default',
         ['jest-junit', {
-            outputDirectory: 'tests/reports/junit',
+            outputDirectory: 'tests/reports',
             outputName: 'junit.xml'
-        }],
-        ['jest-html-reporters', {
-            publicPath: 'tests/reports/test-report',
-            filename: 'index.html',
-            pageTitle: 'Test Report'
         }]
     ],
     coverageDirectory: '../../tests/reports/coverage',
