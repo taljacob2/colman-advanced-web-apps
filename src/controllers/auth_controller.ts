@@ -61,27 +61,23 @@ type TokenPayload = {
     _id: string
 }
 export const authMiddleware = (req:Request,res:Response, next: NextFunction) => {
+    // Skip authentication for GET requests
+    if (req.method === 'GET') {
+        return next();
+    }
+
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
-    console.log("Token:", token);
-    console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
-
     if(!token){
-        res.status(401).send("missing token");
-        console.log("Missing token");
-        return;
+        return res.status(401).send("missing token");
     }
     if(!process.env.ACCESS_TOKEN_SECRET){
-        console.log("Missing auth config");
-        res.status(500).send("missing auth config");
-        return;
+        return res.status(500).send("missing auth config");
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if(err){
-            console.log("invalid Token:", err);
-            res.status(403).send("Invalid Token");
-            return;
+            return res.status(403).send("Invalid Token");
         }
         
         const payload = data as TokenPayload;

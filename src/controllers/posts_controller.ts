@@ -31,17 +31,15 @@ const createPost = async (req, res) => {
 
 const getPostById = async (req, res) => {
     const id = req.params.id;
-    try{
+    try {
         const post = await postModel.findById(id);
-        if(post){
-            res.status(200).send(post);
-        } else{
-            res.status(404).send('Post not found');
+        if (!post) {
+            return res.status(404).send('Post not found');
         }
-    } catch(error){
-        res.status(400).send("Bad Request");
+        return res.status(200).send(post);
+    } catch(error) {
+        return res.status(400).send("Bad Request");
     }
-
 }
 
 const updatePostById = async (req, res) => {
