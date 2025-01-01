@@ -34,7 +34,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './reports/coverage'
+          path: './tests/reports/coverage'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
