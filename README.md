@@ -2,6 +2,8 @@
 
 ## `.env`
 
+As a **requirement** for running the application, create an `.env` file in the root working directory and define the environment variables there.
+
 See [`.env.template`](.env.template) for all the environment variables required.
 
 ### `PORT`
@@ -39,3 +41,31 @@ for example:
 - `30h` - is 30 hours
 
 You can set the NUMBER and the TIME_UNIT to your liking.
+
+## Usage
+
+Install required the node packages:
+
+```
+npm i
+```
+
+Start the appliation:
+
+```
+npm start
+```
+
+### Development
+
+Run the application with nodemon:
+
+```
+npm run dev
+```
+
+Run tests:
+
+```
+npm run test
+```
