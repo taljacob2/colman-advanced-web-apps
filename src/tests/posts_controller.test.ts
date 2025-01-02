@@ -1,18 +1,52 @@
 import request from 'supertest';
 import app from '../app';
+import postsModel from '../models/posts_model'; // Adjust the path as necessary
+import userModel from '../models/user_model'; // Adjust the path as necessary
 
 let existingPost = null;
-let authToken = null;
+
+type UserInfo = {
+    email: string;
+    password: string;
+    token?: string;
+    _id?: string;
+}
+const userInfo:UserInfo = {
+    email: "berrebimevo@gmail.com",
+    password: "123456"
+}
+
+const testPost1 = {
+    "sender": "USERNAME1",
+    "title": "POST1 TITLE",
+    "content": "POST1 CONTENT"
+};
+const testPost2 = {
+    "sender": "USERNAME2",
+    "title": "POST2 TITLE",
+    "content": "POST2 CONTENT"
+};
+const testPost3 = {
+    "sender": "USERNAME2",
+    "title": "POST2 TITLE",
+    "content": "POST2 CONTENT"
+};
+const testUpdatedPost = {
+    "sender": "UPDATED USERNAME",
+    "title": "UPDATED POST TITLE",
+    "content": "UPDATED POST CONTENT"
+};
 
 beforeAll(async () => {
+    // Clear the DB
+    await postsModel.deleteMany();
+    await userModel.deleteMany();	
     // Register and login to get token
-    const user = {
-        email: "test@test.com",
-        password: "123456"
-    };
-    await request(app).post('/auth/register').send(user);
-    const loginResponse = await request(app).post('/auth/login').send(user);
-    authToken = loginResponse.body.token;
+    await request(app).post('/auth/register').send(userInfo);
+    const loginResponse = await request(app).post('/auth/login').send(userInfo);
+
+    userInfo.token = loginResponse.body.token;
+    userInfo._id = loginResponse.body._id;
 });
 
 describe('given db empty of posts when http request GET /post', () => {
@@ -25,21 +59,19 @@ describe('given db empty of posts when http request GET /post', () => {
 
 describe('when http request POST /post', () => {
     it('then should add post to the db', async () => {
-        const body = {
-            "sender": "USERNAME1",
-            "title": "POST1 TITLE",
-            "content": "POST1 CONTENT"
-        };
+        
         const res = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testPost1);
         const resBody = res.body;
         existingPost = { ...resBody };
         delete resBody._id;
-
+        // i need to understand why resBody isEqual to testPost1
+        // but the sender "USERNAME1" is not equal to "userInfo._id"
         expect(res.statusCode).toBe(201);
-        expect(resBody).toEqual(body);
+        expect(resBody).toEqual(testPost1);
+        
     });
 });
 
@@ -50,50 +82,34 @@ describe('when http request POST /post', () => {
 describe('when http request POST /post', () => {
     it('then should add posts to the db', async () => {
         // Post 1
-        const body1 = {
-            "sender": "USERNAME1",
-            "title": "POST1 TITLE",
-            "content": "POST1 CONTENT"
-        };
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body1);
-
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testPost1);
         // Post 2
-        const body2 = {
-            "sender": "USERNAME2",
-            "title": "POST2 TITLE",
-            "content": "POST2 CONTENT"
-        };
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body2);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testPost2);
 
         // Post 3
-        const body3 = {
-            "sender": "USERNAME3",
-            "title": "POST3 TITLE",
-            "content": "POST3 CONTENT"
-        };
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body3);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testPost3);
     });
 });
 
 describe('when http request POST /post without required sender field', () => {
     it('then should return 400 bad request http status', async () => {
-        const body = {
+        const tempPostTest = {
             "title": "POST1 TITLE",
             "content": "POST1 CONTENT"
         };
         const res = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(tempPostTest);
 
         expect(res.statusCode).toBe(400);
     });
@@ -134,15 +150,10 @@ describe('given existing username when http request GET /post?sender', () => {
 
 describe('when http request PUT /post/id of unknown post', () => {
     it('then should return 400 bad request http status', async () => {
-        const body = {
-            "sender": "UPDATED USERNAME",
-            "title": "UPDATED POST TITLE",
-            "content": "UPDATED POST CONTENT"
-        };
         const res = await request(app)
             .put(`/post/UNKNOWN`)
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testUpdatedPost);
 
         expect(res.statusCode).toBe(400);
     });
@@ -150,20 +161,15 @@ describe('when http request PUT /post/id of unknown post', () => {
 
 describe('when http request PUT /post/id of existing post', () => {
     it('then should update post in the db', async () => {
-        const body = {
-            "sender": "UPDATED USERNAME",
-            "title": "UPDATED POST TITLE",
-            "content": "UPDATED POST CONTENT"
-        };
         const res = await request(app)
             .put(`/post/${existingPost._id}`)
-            .set('Authorization', `jwt ${authToken}`)
-            .send(body);
+            .set('Authorization', `jwt ` + userInfo.token)
+            .send(testUpdatedPost);
         const resBody = res.body;
         delete resBody._id;
 
         expect(res.statusCode).toBe(201);
-        expect(resBody).toEqual(body);
+        expect(resBody).toEqual(testUpdatedPost);
     });
 });
 
@@ -175,7 +181,7 @@ describe('when http request PUT /post/id of existing post but without required s
         };
         const res = await request(app)
             .put(`/post/${existingPost._id}`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ` + userInfo.token)
             .send(body);
 
         expect(res.statusCode).toBe(400);
