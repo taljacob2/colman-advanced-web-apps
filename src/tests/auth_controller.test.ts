@@ -47,7 +47,7 @@ describe('Auth Post Test', () => {
             email: userInfo.email,
             password: userInfo.password
         });
-        expect(response.body.accessToken).not.toEqual(userInfo.accessToken);
+        expect(response.body.accessToken).not.toBe(userInfo.accessToken);
     });
 
     test('Get proyected API when trying to Create Post', async () => {

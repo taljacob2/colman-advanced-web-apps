@@ -52,14 +52,22 @@ const login = async (req: Request, res: Response) => {
             res.status(500).send("missing auth config");
             return;
         }
+
+        const random = Math.floor(Math.random() * 1000000);
         const accessToken = jwt.sign(
-            { _id: user._id },
+            {
+                _id: user._id,
+                random: random
+            },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: process.env.TOKEN_EXPIRATION });
 
         const refreshToken = jwt.sign(
-            { _id: user._id },
-            process.env.REFRESH_TOKEN_SECRET,
+            {
+                _id: user._id,
+                random: random
+            },
+            process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
 
         if (user.refreshTokens == null) {
