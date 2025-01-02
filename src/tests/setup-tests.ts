@@ -26,7 +26,7 @@ dotenvExpand.expand(dotenv.config());
  * - Generate a new db name.
  * - Connect to the database.
  */
-global.beforeAll(() => {
+global.beforeAll(async () => {
     const DBNAME = process.env.DB_CONNECTION.split('/')[3].split('?')[0];
     const newDBNAME = "tests";
 
@@ -42,6 +42,9 @@ global.beforeAll(() => {
     const db = mongoose.connection;
     db.on('error', (error) => console.error(error));
     db.once('open', () => console.log("Connected to DataBase"));
+
+    console.log("Dropping DB...");
+    await mongoose.connection.dropDatabase();
 });
 
 /**
@@ -51,7 +54,5 @@ global.beforeAll(() => {
  * - Close the connection to the database.
  */
 global.afterAll(async () => {
-    console.log("Dropping DB...");
-    await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
 });
