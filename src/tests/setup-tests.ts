@@ -28,7 +28,7 @@ dotenvExpand.expand(dotenv.config());
  */
 global.beforeAll(() => {
     const DBNAME = process.env.DB_CONNECTION.split('/')[3].split('?')[0];
-    const newDBNAME = new mongoose.Types.ObjectId().toString();
+    const newDBNAME = "tests";
 
     const dbConnectionUntilDBNAME =
     process.env.DB_CONNECTION.substring(0, process.env.DB_CONNECTION.indexOf(DBNAME));
