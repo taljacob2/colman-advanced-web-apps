@@ -8,7 +8,7 @@ let existingPost = null;
 type UserInfo = {
     email: string;
     password: string;
-    token?: string;
+    accessToken?: string;
     _id?: string;
 }
 const userInfo:UserInfo = {
@@ -41,11 +41,11 @@ beforeAll(async () => {
     // Clear the DB
     await postsModel.deleteMany();
     await userModel.deleteMany();	
-    // Register and login to get token
+    // Register and login to get access token
     await request(app).post('/auth/register').send(userInfo);
     const loginResponse = await request(app).post('/auth/login').send(userInfo);
 
-    userInfo.token = loginResponse.body.token;
+    userInfo.accessToken = loginResponse.body.accessToken;
     userInfo._id = loginResponse.body._id;
 });
 
@@ -62,7 +62,7 @@ describe('when http request POST /post', () => {
         
         const res = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testPost1);
         const resBody = res.body;
         existingPost = { ...resBody };
@@ -84,18 +84,18 @@ describe('when http request POST /post', () => {
         // Post 1
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testPost1);
         // Post 2
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testPost2);
 
         // Post 3
         await request(app)
             .post('/post')
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testPost3);
     });
 });
@@ -108,7 +108,7 @@ describe('when http request POST /post without required sender field', () => {
         };
         const res = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(tempPostTest);
 
         expect(res.statusCode).toBe(400);
@@ -152,7 +152,7 @@ describe('when http request PUT /post/id of unknown post', () => {
     it('then should return 400 bad request http status', async () => {
         const res = await request(app)
             .put(`/post/UNKNOWN`)
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testUpdatedPost);
 
         expect(res.statusCode).toBe(400);
@@ -163,7 +163,7 @@ describe('when http request PUT /post/id of existing post', () => {
     it('then should update post in the db', async () => {
         const res = await request(app)
             .put(`/post/${existingPost._id}`)
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(testUpdatedPost);
         const resBody = res.body;
         delete resBody._id;
@@ -181,7 +181,7 @@ describe('when http request PUT /post/id of existing post but without required s
         };
         const res = await request(app)
             .put(`/post/${existingPost._id}`)
-            .set('Authorization', `jwt ` + userInfo.token)
+            .set('Authorization', `jwt ` + userInfo.accessToken)
             .send(body);
 
         expect(res.statusCode).toBe(400);

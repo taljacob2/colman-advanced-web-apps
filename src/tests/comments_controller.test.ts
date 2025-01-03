@@ -4,17 +4,17 @@ import app from '../app';
 let existingPost1 = null;
 let existingPost2 = null;
 let existingComment = null;
-let authToken = null;
+let accessToken = null;
 
 beforeAll(async () => {
-    // Register and login to get token
+    // Register and login to get access token
     const user = {
         email: "test2@test.com",
         password: "123456"
     };
     await request(app).post('/auth/register').send(user);
     const loginResponse = await request(app).post('/auth/login').send(user);
-    authToken = loginResponse.body.token;
+    accessToken = loginResponse.body.accessToken;
 });
 
 describe('given db empty of comments when http request GET /comment', () => {
@@ -39,7 +39,7 @@ describe('when http request POST /post', () => {
         };
         const res1 = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body1);
         const resBody1 = res1.body;
         existingPost1 = { ...resBody1 };
@@ -52,7 +52,7 @@ describe('when http request POST /post', () => {
         };
         const res2 = await request(app)
             .post('/post')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body2);
         const resBody2 = res2.body;
         existingPost2 = { ...resBody2 };
@@ -68,7 +68,7 @@ describe('when http request POST /comment to an unknown post', () => {
         };
         const res = await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -83,7 +83,7 @@ describe('when http request POST /comment to an existing post without required s
         };
         const res = await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -98,7 +98,7 @@ describe('when http request POST /comment without required postId field', () => 
         };
         const res = await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -114,7 +114,7 @@ describe('when http request POST /comment  to an existing post', () => {
         };
         const res = await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
         const resBody = res.body;
         existingComment = { ...resBody };
@@ -141,7 +141,7 @@ describe('when http request POST /comment  to an existing post', () => {
         };
         await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body1);
 
         // Comment 2
@@ -152,7 +152,7 @@ describe('when http request POST /comment  to an existing post', () => {
         };
         await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body2);
 
         // Comment 3
@@ -163,7 +163,7 @@ describe('when http request POST /comment  to an existing post', () => {
         };
         await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body3);
     });
 });
@@ -185,7 +185,7 @@ describe('when http request PUT /comment/id of unknown post', () => {
         };
         const res = await request(app)
             .put(`/comment/${existingComment._id}`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
         const resBody = res.body;
 
@@ -208,7 +208,7 @@ describe('when http request PUT /comment/id of unknown comment', () => {
         };
         const res = await request(app)
             .put(`/comment/UNKNOWN`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -223,7 +223,7 @@ describe('when http request PUT /comment/id without required postId field', () =
         };
         const res = await request(app)
             .put(`/comment/${existingComment._id}`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
         const resBody = res.body;
 
@@ -245,7 +245,7 @@ describe('when http request PUT /comment/id without required sender field', () =
         };
         const res = await request(app)
             .put(`/comment/${existingComment._id}`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
 
         expect(res.statusCode).toBe(400);
@@ -261,7 +261,7 @@ describe('when http request PUT /comment/id of existing post and comment', () =>
         };
         const res = await request(app)
             .put(`/comment/${existingComment._id}`)
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send(body);
         const resBody = res.body;
 
@@ -315,7 +315,7 @@ describe('given unknown comment when http request DELETE /comment/id', () => {
     it('then should return 400 bad request http status', async () => {
         const res = await request(app)
             .delete(`/comment/UNKNOWN`)
-            .set('Authorization', `jwt ${authToken}`);
+            .set('Authorization', `jwt ${accessToken}`);
 
         expect(res.statusCode).toBe(400);
     });
@@ -326,7 +326,7 @@ describe('given existing comment when http request DELETE /comment/id', () => {
         // First create a comment to delete
         const createComment = await request(app)
             .post('/comment')
-            .set('Authorization', `jwt ${authToken}`)
+            .set('Authorization', `jwt ${accessToken}`)
             .send({
                 postId: existingPost1._id,
                 sender: "USERNAME1",
@@ -337,7 +337,7 @@ describe('given existing comment when http request DELETE /comment/id', () => {
         
         const res = await request(app)
             .delete(`/comment/${commentId}`)
-            .set('Authorization', `jwt ${authToken}`);
+            .set('Authorization', `jwt ${accessToken}`);
 
         expect(res.statusCode).toBe(200);
     });
