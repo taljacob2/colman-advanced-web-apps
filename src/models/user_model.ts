@@ -8,11 +8,15 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    
+
     password: {
         type: String,
         required: true
     },
+    refreshTokens: {
+        type: [String],
+        default: [] // refresh tokens per user
+    }
 }, {
     versionKey: false,
 });
