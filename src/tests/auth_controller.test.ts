@@ -129,15 +129,24 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
         });
         expect(response.statusCode).not.toBe(201);
     });
-    test("Refresh token", async () => {
+
+    const refreshTokenTest = async () => {
+
         const response = await request(app).post('/auth/refresh').send({
             refreshToken: userInfo.refreshToken
+
         });
         expect(response.statusCode).toBe(200);
         expect(response.body.accessToken).toBeDefined();
         expect(response.body.refreshToken).toBeDefined();
-        userInfo.accessToken = response.body.accessToken
-        userInfo.refreshToken = response.body.refreshToken
+        userInfo.accessToken = response.body.accessToken;
+        userInfo.refreshToken = response.body.refreshToken;
+    }
+    test("Refresh token", async () => {
+        refreshTokenTest();
+    });
+    test("Refresh token", async () => {
+        refreshTokenTest();
     });
 
     test("Logout - Invalid refresh token", async () => {
@@ -158,9 +167,9 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
             password: userInfo.password
         });
         expect(response.statusCode).toBe(200);
-
         userInfo.accessToken = response.body.accessToken
         userInfo.refreshToken = response.body.refreshToken
+
         // first time use the refresh token and get a new one
         const response2 = await request(app).post('/auth/refresh').send({
             refreshToken: userInfo.refreshToken

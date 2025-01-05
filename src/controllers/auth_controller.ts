@@ -103,14 +103,14 @@ const logout = async (req: Request, res: Response) => {
         res.status(400).send("missing auth config");
         return;
     }
-    jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err: AnyObject, data: AnyObject) => {
+    jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err, data) => {
         if (err) {
             res.status(403).send("Invalid Token");
             return;
         }
         const payload = data as TokenPayload;
         try {
-            const user = await userModel.findById(payload._id);
+            const user = await userModel.findById({ _id: payload._id });
             if (!user) {
                 res.status(400).send("Invalid Token");
                 return;
@@ -121,7 +121,8 @@ const logout = async (req: Request, res: Response) => {
                 await user.save();
                 return;
             }
-            user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken);
+            const tokens = user.refreshTokens.filter((token) => token !== refreshToken);
+            user.refreshTokens = tokens;
             await user.save();
             res.status(200).send("Logged out");
         } catch (err) {
@@ -140,7 +141,7 @@ const refresh = async (req: Request, res: Response) => {
         res.status(500).send("missing auth config");
         return;
     }
-    jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err: AnyObject, data: AnyObject) => {
+    jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err, data) => {
         if (err) {
             res.status(403).send("Invalid Token");
             return;
