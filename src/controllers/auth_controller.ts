@@ -89,11 +89,65 @@ const login = async (req: Request, res: Response) => {
 };
 
 const logout = async (req: Request, res: Response) => {
-    res.status(400).send("Not implemented");
-};
-const refresh = async (req: Request, res: Response) => {
-    res.status(400).send("Not implemented");
+    const { refreshToken } = req.body;
 
+    if (!refreshToken) {
+        return res.status(401).send("Missing refresh token");
+    }
+
+    try {
+        const user = await userModel.findOne({ refreshTokens: refreshToken });
+        if (!user) {
+            return res.status(403).send("Invalid refresh token");
+        }
+
+        user.refreshTokens = user.refreshTokens.filter(rt => rt !== refreshToken);
+        await user.save();
+        res.status(200).send("Logged out successfully");
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+const refresh = async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+        return res.status(401).send("Missing refresh token");
+    }
+
+    try {
+        const user = await userModel.findOne({ refreshTokens: refreshToken });
+        if (!user) {
+            return res.status(403).send("Invalid refresh token");
+        }
+
+        if (!process.env.ACCESS_TOKEN_SECRET) {
+            return res.status(500).send("Missing auth config");
+        }
+
+        // Generate a new access token
+        const newAccessToken = jwt.sign(
+            { _id: user._id },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: process.env.TOKEN_EXPIRATION }
+        );
+
+        // Generate a new refresh token
+        const newRefreshToken = jwt.sign(
+            { _id: user._id },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION }
+        );
+
+        // Update user's refresh tokens
+        user.refreshTokens = user.refreshTokens.filter(rt => rt !== refreshToken); // Remove old refresh token
+        user.refreshTokens.push(newRefreshToken); // Add new refresh token
+        await user.save();
+
+        res.status(200).send({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    } catch (err) {
+        res.status(500).send(err);
+    }
 };
 
 type TokenPayload = {
