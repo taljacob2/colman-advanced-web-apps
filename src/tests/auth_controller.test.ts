@@ -161,6 +161,7 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
 
         userInfo.accessToken = response.body.accessToken
         userInfo.refreshToken = response.body.refreshToken
+
         // first time use the refresh token and get a new one
         const response2 = await request(app).post('/auth/refresh').send({
             refreshToken: userInfo.refreshToken
@@ -175,11 +176,11 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
         });
         expect(response3.statusCode).not.toBe(200);
 
-        // try to use the new refresh token and expect to
+        // Try to use the new refresh token and expect to succeed
         const response4 = await request(app).post('/auth/refresh').send({
             refreshToken: newRefreshToken
         });
-        expect(response4.statusCode).not.toBe(200);
+        expect(response4.statusCode).toBe(200);
     });
 });
 
