@@ -119,6 +119,11 @@ describe('Auth Comment Test', () => {
 });
 
 describe('Auth Invalid & Refresh tokens Tests', () => {
+    beforeAll(() => {
+        process.env.TOKEN_EXPIRATION = '3s';
+        process.env.REFRESH_TOKEN_EXPIRATION = '7d';
+    });
+
     test('Get proyected API invalid token', async () => {
         const response = await request(app).post('/post').set({
             authorization: "jwt " + userInfo.accessToken + '1'
@@ -129,15 +134,24 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
         });
         expect(response.statusCode).not.toBe(201);
     });
-    test("Refresh token", async () => {
+
+    const refreshTokenTest = async () => {
+
         const response = await request(app).post('/auth/refresh').send({
             refreshToken: userInfo.refreshToken
+
         });
         expect(response.statusCode).toBe(200);
         expect(response.body.accessToken).toBeDefined();
         expect(response.body.refreshToken).toBeDefined();
-        userInfo.accessToken = response.body.accessToken
-        userInfo.refreshToken = response.body.refreshToken
+        userInfo.accessToken = response.body.accessToken;
+        userInfo.refreshToken = response.body.refreshToken;
+    }
+    test("Refresh token", async () => {
+        refreshTokenTest();
+    });
+    test("Refresh token", async () => {
+        refreshTokenTest();
     });
 
     test("Logout - Invalid refresh token", async () => {
@@ -158,9 +172,9 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
             password: userInfo.password
         });
         expect(response.statusCode).toBe(200);
-
         userInfo.accessToken = response.body.accessToken
         userInfo.refreshToken = response.body.refreshToken
+
         // first time use the refresh token and get a new one
         const response2 = await request(app).post('/auth/refresh').send({
             refreshToken: userInfo.refreshToken
@@ -181,5 +195,50 @@ describe('Auth Invalid & Refresh tokens Tests', () => {
         });
         expect(response4.statusCode).not.toBe(200);
     });
+
+    jest.setTimeout(10000);
+    test("timeout on refresh access token", async () => {
+        const response = await request(app).post('/auth/login').send({
+            email: userInfo.email,
+            password: userInfo.password
+        });
+        expect(response.statusCode).toBe(200);
+        expect(response.body.accessToken).toBeDefined();
+        expect(response.body.refreshToken).toBeDefined();
+        userInfo.accessToken = response.body.accessToken
+        userInfo.refreshToken = response.body.refreshToken
+
+        // wait 6 seconds
+        await new Promise(resolve => setTimeout(resolve, 6000));
+
+        //try to access with expired token
+        const response2 = await request(app).post('/post').set({
+            authorization: "jwt " + userInfo.accessToken
+        }).send({
+            sender: "Invalid owner",
+            title: "My First Post",
+            content: "This is my First Posts"
+        });
+        expect(response2.statusCode).not.toBe(201);
+
+        const response3 = await request(app).post('/auth/refresh').send({
+            refreshToken: userInfo.refreshToken
+        });
+        expect(response3.statusCode).toBe(200);
+        userInfo.accessToken = response3.body.accessToken;
+        userInfo.refreshToken = response3.body.refreshToken;
+
+        const response4 = await request(app).post('/post').set({
+            authorization: "jwt " + userInfo.accessToken
+        }).send({
+            sender: "Invalid owner",
+            title: "My First Post",
+            content: "This is my First Posts"
+        });
+        expect(response4.statusCode).toBe(201);
+    });
+
+
+
 });
 
