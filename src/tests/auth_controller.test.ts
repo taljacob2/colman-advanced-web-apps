@@ -119,6 +119,11 @@ describe('Auth Comment Test', () => {
 });
 
 describe('Auth Invalid & Refresh tokens Tests', () => {
+    beforeAll(() => {
+        process.env.TOKEN_EXPIRATION = '3s';
+        process.env.REFRESH_TOKEN_EXPIRATION = '7d';
+    });
+
     test('Get proyected API invalid token', async () => {
         const response = await request(app).post('/post').set({
             authorization: "jwt " + userInfo.accessToken + '1'
