@@ -1,0 +1,43 @@
+name: Deploy coverage report to Pages
+
+on:
+  push:
+    branches: ['*']
+
+  workflow_dispatch:
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm i
+      - run: npm run test
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v4
+      - name: Upload Artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './coverage/lcov-report'
+          name: 'github-pages'
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v4
