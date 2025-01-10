@@ -5,11 +5,10 @@ import bodyParser from 'body-parser';
 import posts_routes from './routes/posts_routes';
 import comments_routes from './routes/comments_routes';
 import auth_routes from './routes/auth_routes';
-
-
-dotenvExpand.expand(dotenv.config());
 import swaggerUi from 'swagger-ui-express';
 import loadOpenApiFile from './openapi/openapi_loader';
+
+dotenvExpand.expand(dotenv.config());
 const app = express();
 
 app.use(bodyParser.json());
