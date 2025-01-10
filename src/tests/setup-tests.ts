@@ -6,7 +6,7 @@ dotenvExpand.expand(dotenv.config());
 
 
 /*
- * Each `__tests__/*.test.js` file is called a test "Suite".
+ * Each `*.test.js` file is called a test "Suite".
  * This file configures each test suite.
  *
  * - The `global.beforeAll` function configures a global hook to run when a
