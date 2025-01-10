@@ -6,8 +6,8 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "dev": "nodemon ./src/server.ts",
-    "test": "jest",
-    "testAuth": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --watchAll=false --runInBand --detectOpenHandles --forceExit auth_controller.test.ts"
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "testAuth": "cross-env NODE_ENV=test jest --runInBand auth_controller.test.ts"
   },
   "repository": {
     "type": "git",
