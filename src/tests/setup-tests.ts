@@ -1,7 +1,8 @@
-const dotenv = require("dotenv");
-const dotenvExpand = require("dotenv-expand");
+import dotenv from "dotenv";
+import dotenvExpand from "dotenv-expand";
+import mongoose from 'mongoose';
 dotenvExpand.expand(dotenv.config());
-const mongoose = require('mongoose');
+
 
 
 /*
@@ -25,9 +26,9 @@ dotenvExpand.expand(dotenv.config());
  * - Generate a new db name.
  * - Connect to the database.
  */
-global.beforeAll(() => {
+global.beforeAll(async () => {
     const DBNAME = process.env.DB_CONNECTION.split('/')[3].split('?')[0];
-    const newDBNAME = new mongoose.Types.ObjectId().toString();
+    const newDBNAME = "tests";
 
     const dbConnectionUntilDBNAME =
     process.env.DB_CONNECTION.substring(0, process.env.DB_CONNECTION.indexOf(DBNAME));
@@ -41,6 +42,9 @@ global.beforeAll(() => {
     const db = mongoose.connection;
     db.on('error', (error) => console.error(error));
     db.once('open', () => console.log("Connected to DataBase"));
+
+    console.log("Dropping DB...");
+    await mongoose.connection.dropDatabase();
 });
 
 /**
@@ -50,7 +54,5 @@ global.beforeAll(() => {
  * - Close the connection to the database.
  */
 global.afterAll(async () => {
-    console.log("Dropping DB...");
-    await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
 });

@@ -4,10 +4,12 @@
 
 # Node
 node_modules/
+dist/
 package-lock.json
+openssl-secret.txt
 
 # Environment
 .env
 
 # Tests
-tests/reports/
+**/tests/reports
