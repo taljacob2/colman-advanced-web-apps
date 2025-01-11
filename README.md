@@ -79,3 +79,5 @@ Run tests:
 ```
 npm run test
 ```
+
+See our `master` test coverage at https://taljacob2.github.io/colman-advanced-web-apps
