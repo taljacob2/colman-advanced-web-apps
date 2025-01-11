@@ -54,7 +54,7 @@ You should define it in the same way as [`TOKEN_EXPIRATION`](https://github.com/
 
 ## Usage
 
-Install required the node packages:
+Install the required node packages:
 
 ```
 npm i
