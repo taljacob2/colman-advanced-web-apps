@@ -1,0 +1,505 @@
+openapi: 3.0.1
+info:
+  title: Post and Comment API
+  description: API for managing posts and comments.
+  version: 1.0.0
+
+tags:
+  - name: Posts
+    description: Operations related to posts
+  - name: Comments
+    description: Operations related to comments on posts
+  - name: Authentication
+    description: Operations related to authentication tokens
+
+paths:
+  # Post Routes
+  /post:
+    get:
+      tags:
+        - Posts
+      summary: Retrieve all posts
+      parameters:
+        - in: query
+          name: sender
+          schema:
+            type: string
+          description: Filter posts by sender
+      responses:
+        '200':
+          description: List of posts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+    post:
+      tags:
+        - Posts
+      security:
+        - BearerAuth: []
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad request - Missing required fields
+        '401':
+          description: Unauthorized - Missing token
+        '403':
+          description: Forbidden - Invalid or expired token
+
+  /post/{postId}:
+    put:
+      tags:
+        - Posts
+      security:
+        - BearerAuth: []
+      summary: Update a post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad request - Invalid post ID or missing required fields
+        '401':
+          description: Unauthorized - Missing token
+        '403':
+          description: Forbidden - Invalid or expired token
+        '404':
+          description: Post not found
+
+  /post/{postId}/comment:
+    get:
+      tags:
+        - Posts
+      summary: Retrieve comments for a specific post
+      operationId: getCommentsByPostId
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to fetch comments for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of comments for the specified post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Invalid postId
+        '404':
+          description: Not found - The postId does not exist
+
+  # Comment Routes
+  /comment:
+    get:
+      tags:
+        - Comments
+      summary: Retrieve all comments
+      responses:
+        '200':
+          description: List of comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+
+    post:
+      tags:
+        - Comments
+      security:
+        - BearerAuth: []
+      summary: Create a new comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Missing required fields or invalid post ID
+        '401':
+          description: Unauthorized - Missing token
+        '403':
+          description: Forbidden - Invalid or expired token
+        '404':
+          description: Post not found
+
+  /comment/{commentId}:
+    put:
+      tags:
+        - Comments
+      security:
+        - BearerAuth: []
+      summary: Update a comment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Comment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Invalid comment ID or missing required fields
+        '401':
+          description: Unauthorized - Missing token
+        '403':
+          description: Forbidden - Invalid or expired token
+        '404':
+          description: Comment not found
+
+    delete:
+      tags:
+        - Comments
+      security:
+        - BearerAuth: []
+      summary: Delete a comment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment deleted successfully
+        '400':
+          description: Bad request - Invalid comment ID
+        '401':
+          description: Unauthorized - Missing token
+        '403':
+          description: Forbidden - Invalid or expired token
+        '404':
+          description: Comment not found
+
+  /comment/post/{postId}:
+    get:
+      tags:
+        - Comments
+      summary: Get comments for a specific post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of comments for the post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request - Invalid post ID
+        '404':
+          description: Post not found
+
+  # Authentication Routes
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 6
+      responses:
+        '200':
+          description: User successfully registered
+        '400':
+          description: Bad request - Invalid input
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  _id:
+                    type: string
+        '401':
+          description: Invalid credentials
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: New tokens generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        '401':
+          description: Invalid refresh token
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Successfully logged out
+        '401':
+          description: Invalid refresh token
+
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+        - _id
+        - sender
+        - title
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        _id:
+          type: string
+          description: The unique identifier of the post
+        sender:
+          type: string
+          description: The sender of the post
+        title:
+          type: string
+          description: The title of the post
+        content:
+          type: string
+          description: The content of the post
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the post was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the post was last updated
+
+    PostRequest:
+      type: object
+      required:
+        - sender
+        - title
+        - content
+      properties:
+        sender:
+          type: string
+          description: The sender of the post
+        title:
+          type: string
+          description: The title of the post
+        content:
+          type: string
+          description: The content of the post
+
+    Comment:
+      type: object
+      required:
+        - _id
+        - postId
+        - sender
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        _id:
+          type: string
+          description: The unique identifier of the comment
+        postId:
+          type: string
+          description: The ID of the post the comment belongs to
+        sender:
+          type: string
+          description: The sender of the comment
+        content:
+          type: string
+          description: The content of the comment
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the comment was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the comment was last updated
+
+    CommentRequest:
+      type: object
+      required:
+        - postId
+        - sender
+        - content
+      properties:
+        postId:
+          type: string
+          description: The ID of the post the comment should belong to
+        sender:
+          type: string
+          description: The sender of the comment
+        content:
+          type: string
+          description: The content of the comment
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        _id:
+          type: string
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /auth/login endpoint
