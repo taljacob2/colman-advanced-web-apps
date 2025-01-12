@@ -13,3 +13,4 @@ openssl-secret.txt
 
 # Tests
 **/tests/reports
+coverage

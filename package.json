@@ -6,8 +6,8 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "dev": "nodemon ./src/server.ts",
-    "test": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit",
-    "testAuth": "cross-env NODE_ENV=test jest --config=src/tests/jest.config.ts --collectCoverage --ci --watchAll=false --runInBand --detectOpenHandles --forceExit auth_controller.test.ts"
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "testAuth": "cross-env NODE_ENV=test jest --runInBand auth_controller.test.ts"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
     "@eslint/js": "^9.17.0",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.1",
