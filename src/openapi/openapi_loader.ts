@@ -9,7 +9,7 @@ const loadOpenApiFile = () => {
         return yaml.load(swaggerContent);
     } catch (error) {
         console.error('Error loading OpenAPI file:', error);
-        return {};
+        return error;
     }
 };
 
