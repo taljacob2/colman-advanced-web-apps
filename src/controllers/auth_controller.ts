@@ -28,6 +28,9 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
     if (!process.env.ACCESS_TOKEN_SECRET) {
         throw new Error("Missing ACCESS_TOKEN_SECRET in environment variables");
     }
+    if (!process.env.TOKEN_EXPIRATION) {
+        throw new Error("Missing TOKEN_EXPIRATION in environment variables");
+    }
     const accessToken = jwt.sign(
         {
             _id: _id,
@@ -36,12 +39,18 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.TOKEN_EXPIRATION });
 
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+        throw new Error("Missing REFRESH_TOKEN_SECRET in environment variables");
+    }
+    if (!process.env.REFRESH_TOKEN_EXPIRATION ) {
+        throw new Error("Missing REFRESH_TOKEN_EXPIRATION in environment variables");
+    }
     const refreshToken = jwt.sign(
         {
             _id: _id,
             random: random
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
 
     return { accessToken, refreshToken };
