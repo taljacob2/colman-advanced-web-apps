@@ -19,7 +19,6 @@ jobs:
           envkey_DB_CONNECTION: mongodb://localhost:27017/app
           envkey_ACCESS_TOKEN_SECRET: 2a955a8b802eab6c693ba116f5e1bc8d2d2cf5e5e83e579cecb3fc363fb077229a801e7392f348d3c370e2383169cab80f556421d3ec2186def5d36ed5a317b6
           envkey_TOKEN_EXPIRATION: 30s
-          envkey_REFRESH_TOKEN_SECRET: 2a955a8b802eab6c693ba116f5e1bc8d2d2cf5e5e83e579cecb3fc363fb077229a801e7392f348d3c370e2383169cab80f556421d3ec2186def5d36ed5a317b6
           envkey_REFRESH_TOKEN_EXPIRATION: 1d
           file_name: .env
           fail_on_empty: true
