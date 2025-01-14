@@ -39,9 +39,6 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.TOKEN_EXPIRATION });
 
-    if (!process.env.REFRESH_TOKEN_SECRET) {
-        throw new Error("Missing REFRESH_TOKEN_SECRET in environment variables");
-    }
     if (!process.env.REFRESH_TOKEN_EXPIRATION ) {
         throw new Error("Missing REFRESH_TOKEN_EXPIRATION in environment variables");
     }
@@ -50,7 +47,7 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
             _id: _id,
             random: random
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
 
     return { accessToken, refreshToken };
