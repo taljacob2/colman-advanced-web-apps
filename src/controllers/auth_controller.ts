@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { AnyObject } from 'mongoose';
 import { error } from 'console';
 
-const register = async (req: Request, res: Response) => {
+const register = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     if (!email || !password) {
@@ -39,7 +39,7 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.TOKEN_EXPIRATION });
 
-    if (!process.env.REFRESH_TOKEN_EXPIRATION ) {
+    if (!process.env.REFRESH_TOKEN_EXPIRATION) {
         throw new Error("Missing REFRESH_TOKEN_EXPIRATION in environment variables");
     }
     const refreshToken = jwt.sign(
@@ -53,7 +53,7 @@ const generateTokens = (_id: string): { accessToken: string, refreshToken: strin
     return { accessToken, refreshToken };
 }
 
-const login = async (req: Request, res: Response) => {
+const login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     if (!email || !password) {
@@ -95,7 +95,7 @@ const login = async (req: Request, res: Response) => {
 
 };
 
-const logout = async (req: Request, res: Response) => {
+const logout = async (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         return res.status(400).send("missing refresh Token");
@@ -130,7 +130,7 @@ const logout = async (req: Request, res: Response) => {
         }
     });
 };
-const refresh = async (req: Request, res: Response) => {
+const refresh = async (req, res) => {
     //first validate the refresh token
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {

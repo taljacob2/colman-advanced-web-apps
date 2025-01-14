@@ -24,7 +24,7 @@ Authorization: jwt
 Content-Type: application/json
 
 {
-    "email": "berrebiTest@gmail.com",
+    "email": "berrebi@gmail.com",
     "password": "0105896"
 }
 
@@ -35,7 +35,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "berrebiTest@gmail.com",
+    "email": "berrebi@gmail.com",
     "password": "0105896"
 }
 
@@ -44,11 +44,11 @@ Content-Type: application/json
 ### - POST NEW POST
 POST http://localhost:3000/post
 Content-Type: application/json
-Authorization: jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg0ZTRiOTg3OGM1MTY2ZWU4ODNmZGUiLCJyYW5kb20iOjkwMzI0OCwiaWF0IjoxNzM2NzYyOTI4LCJleHAiOjE3MzczNjc3Mjh9.oa1bQ8jYQPImvT-2UKbK5Z37d3kG6glKM-XDfeGhvNI
+Authorization: jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg2NDkxYTc5NDM3NDBiZGFmYmE5MjgiLCJyYW5kb20iOjk2NjI5OCwiaWF0IjoxNzM2ODUzODkwLCJleHAiOjE3Mzc0NTg2OTB9.oEDZaquYp4e8nAdSkeFrtIXEMh91smGsIGKo4CNiR3g
     
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg0ZTRiOTg3OGM1MTY2ZWU4ODNmZGUiLCJyYW5kb20iOjkwMzI0OCwiaWF0IjoxNzM2NzYyOTI4LCJleHAiOjE3MzY3NjI5MzF9.ojnv1nVKwl03cv5tzr-jQccKUgsmu9dPyl3eyoDfkw0",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg0ZTRiOTg3OGM1MTY2ZWU4ODNmZGUiLCJyYW5kb20iOjkwMzI0OCwiaWF0IjoxNzM2NzYyOTI4LCJleHAiOjE3MzczNjc3Mjh9.oa1bQ8jYQPImvT-2UKbK5Z37d3kG6glKM-XDfeGhvNI",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg2NDkxYTc5NDM3NDBiZGFmYmE5MjgiLCJyYW5kb20iOjk2NjI5OCwiaWF0IjoxNzM2ODUzODkwLCJleHAiOjE3MzY4NTM4OTN9.QFrAgLp3q8XpDfVBGbeg2GD-L8p85tV7nhl70WQVp-0",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzg2NDkxYTc5NDM3NDBiZGFmYmE5MjgiLCJyYW5kb20iOjk2NjI5OCwiaWF0IjoxNzM2ODUzODkwLCJleHAiOjE3Mzc0NTg2OTB9.oEDZaquYp4e8nAdSkeFrtIXEMh91smGsIGKo4CNiR3g",
     "sender": "6784e4b9878c5166ee883fde",
     "title": "Post New After manuel login",
     "content": "HELLO PostTEST!!"

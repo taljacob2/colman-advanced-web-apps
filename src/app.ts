@@ -22,8 +22,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(loadOpenApiFile()));
-app.use('/post', posts_routes);	
-app.use('/comment', comments_routes);	
+app.use('/post', posts_routes);
+app.use('/comment', comments_routes);
 app.use('/auth', auth_routes);
 
 export default app;

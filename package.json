@@ -4,7 +4,7 @@
   "description": "Advanced Web Apps Course Exercise",
   "main": "src/server.ts",
   "scripts": {
-    "start": "tsc && node dist/server.js",
+    "start": "tsc && node ./dist/server.js",
     "dev": "nodemon ./src/server.ts",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "testAuth": "cross-env NODE_ENV=test jest --runInBand auth_controller.test.ts"
@@ -31,9 +31,9 @@
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.2",
-    "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "supertest": "^7.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.26.0",
@@ -46,12 +46,14 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.7",
-    "eslint": "^9.17.0",
+    "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "nodemon": "^3.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2",
+    "typescript": "^5.7.3",
     "typescript-eslint": "^8.18.2"
   }
 }
